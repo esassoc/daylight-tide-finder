@@ -8,6 +8,6 @@ const uiFont = '"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
 document.documentElement.style.setProperty("--font-geist-sans", uiFont);
 document.documentElement.style.setProperty("--font-geist-mono", uiFont);
 
-const root=document.getElementById("root");
-if(!root)throw new Error("Static application root is missing.");
-createRoot(root).render(<Home/>);
+const root = document.getElementById("root");
+if (!root) throw new Error("Static application root is missing.");
+createRoot(root).render(<Home />);

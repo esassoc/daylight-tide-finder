@@ -26,18 +26,24 @@ npm ci            # install (uses package-lock.json)
 npm run dev       # Vite dev server (root is static/)
 npm run build     # -> static-dist/
 npm run preview   # serve the production build
+npm run format    # Prettier --write (ESA config: 4-space, printWidth 180)
 npm test          # build + assert the bundle is server-free and calls NOAA
 ```
+
+Formatting is Prettier-managed (`.prettierrc` mirrors the ESA `.prettierrc` used
+in wave-runup / TalentBridge). `*.md` and `static-dist/` are ignored
+(`.prettierignore`). Run `npm run format` before committing.
 
 ## Architecture (small and flat — don't over-structure it)
 
 - `static/index.html` — HTML shell: `<title>`, meta description, `theme-color`
   (`#3a524e`), favicon link, the ESA font-suite `<link>` tags, `<div id="root">`,
   and the module script.
-- `static/main.tsx` — Vite entry. Mounts `<Home/>` from `app/page.tsx` and sets
-  the `--font-geist-sans` / `--font-geist-mono` CSS vars (DM Sans / JetBrains Mono,
-  the ESA UI + mono faces). This replaces what a Next.js layout used to do.
-- `app/page.tsx` — **the entire app**: one ~283-line client component
+- `static/main.tsx` — Vite entry. Mounts `<Home/>` from `app/page.tsx` and points
+  both legacy `--font-geist-sans` / `--font-geist-mono` CSS vars at DM Sans (the
+  single UI face). This replaces what a Next.js layout used to do.
+- `app/page.tsx` — **the entire app**: one client component (~950 lines once
+  Prettier-formatted; it was authored as terse one-liners)
   (`"use client"` at the top; harmless in a pure client build). Contains all
   state, the NOAA fetch logic, the calendar/list/month views, the Leaflet map,
   and the tide-signature chart. Only imports `react` and `leaflet` types.
