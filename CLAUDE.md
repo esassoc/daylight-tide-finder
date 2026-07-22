@@ -74,16 +74,20 @@ Current token → ESA mapping:
 
 ### Fonts
 
-The ESA type suite (matching wave-runup / TalentBridge) loads from Google Fonts
-via `<link>` tags in `static/index.html`:
+The app uses **two** faces — the ESA UI + display pair (matching wave-runup /
+TalentBridge), loaded from Google Fonts via `<link>` tags in `static/index.html`:
 
-- **DM Sans** — UI / body. Bound to `--font-geist-sans` in `main.tsx`; used for
-  `body`, controls, and the mono-labelled eyebrows fall back to it.
+- **DM Sans** — everything UI: `body`, controls, and all the uppercase
+  micro-labels / eyebrows (rendered as letter-spaced DM Sans overlines, the ESA
+  pattern). `main.tsx` binds **both** legacy Geist vars (`--font-geist-sans` and
+  `--font-geist-mono`) to DM Sans, so the ~40 `var(--font-geist-mono)` usages
+  scattered through `globals.css` all resolve to DM Sans without a per-rule edit.
 - **Domine** — decorative serif headings. Exposed as `--font-serif` in the
   `:root` of `app/globals.css`; every heading that used to say `Georgia,serif`
   now references `var(--font-serif)`.
-- **JetBrains Mono** — mono labels / eyebrows / small caps. Bound to
-  `--font-geist-mono` in `main.tsx`.
+
+There is intentionally **no monospace face** — ESA reserves mono for code, not UI.
+Don't reintroduce one for labels or numeric readouts.
 
 ### Logo & favicon
 
