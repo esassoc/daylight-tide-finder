@@ -238,20 +238,29 @@ fieldset.control {
 .datum > small.available {
     color: var(--marine);
 }
-.night {
-    min-height: 46px;
-    padding: 0 4px 3px;
+.light-toggles {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+}
+.light-toggle {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    font-weight: 650;
+    gap: 12px;
+    min-height: 58px;
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--paper);
+    cursor: pointer;
 }
-.night input {
+.light-toggle input {
     position: absolute;
     opacity: 0;
 }
-.night > span {
+.light-toggle .switch {
+    flex: 0 0 auto;
     width: 42px;
     height: 24px;
     padding: 3px;
@@ -260,20 +269,43 @@ fieldset.control {
     background: #dcdcdc;
     transition: 0.16s;
 }
-.night i {
+.light-toggle .switch i {
     display: block;
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: white;
+    background: #fff;
     box-shadow: 0 1px 4px #0003;
     transition: 0.16s;
 }
-.night input:checked + span {
+.light-toggle input:checked + .switch {
     background: var(--orange);
 }
-.night input:checked + span i {
+.light-toggle input:checked + .switch i {
     transform: translateX(18px);
+}
+.light-toggle input:focus-visible + .switch {
+    outline: 3px solid #f4815673;
+    outline-offset: 2px;
+}
+.light-toggle .toggle-text {
+    min-width: 0;
+}
+.light-toggle .toggle-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 650;
+    color: var(--ink);
+}
+.light-toggle .toggle-text small {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 10px;
+}
+.light-toggle.disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
 }
 .workspace {
     width: min(var(--page-max), calc(100% - 2 * var(--gutter)));
@@ -1064,87 +1096,6 @@ a:focus-visible {
     outline: 3px solid #f4815673;
     outline-offset: 2px;
 }
-.sun-filter-control {
-    grid-column: 1/-1;
-    min-height: 68px;
-    padding: 13px 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 22px;
-    border: 1px solid var(--border);
-    border-radius: 11px;
-    background: var(--paper);
-    transition: 0.18s;
-}
-.sun-filter-control > div {
-    min-width: 0;
-}
-.sun-filter-control strong,
-.sun-filter-control small {
-    display: block;
-}
-.sun-filter-control strong {
-    margin-top: 4px;
-    font-size: 14px;
-}
-.sun-filter-control small {
-    margin-top: 3px;
-    color: var(--muted);
-    font-size: 10px;
-}
-.sun-filter-control.active {
-    border-color: #aecbc7;
-    background: var(--seafoam);
-    box-shadow: inset 4px 0 0 var(--orange);
-}
-.sun-filter-toggle {
-    flex: 0 0 auto;
-    min-width: 118px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 12px;
-    border: 0;
-    background: transparent;
-    color: var(--muted);
-    font:
-        700 10px var(--font-geist-mono),
-        monospace;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-.sun-filter-toggle > b {
-    width: 38px;
-    height: 22px;
-    padding: 3px;
-    display: block;
-    border-radius: 99px;
-    background: #dcdcdc;
-    transition: 0.16s;
-}
-.sun-filter-toggle i {
-    display: block;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 1px 4px #0003;
-    transition: 0.16s;
-}
-.sun-filter-control.active .sun-filter-toggle {
-    color: var(--kelp);
-}
-.sun-filter-control.active .sun-filter-toggle > b {
-    background: var(--orange);
-}
-.sun-filter-control.active .sun-filter-toggle i {
-    transform: translateX(16px);
-}
-.night.disabled {
-    cursor: not-allowed;
-    opacity: 0.42;
-}
 .chart {
     cursor: crosshair;
 }
@@ -1721,13 +1672,8 @@ a:focus-visible {
     .controls {
         grid-template-columns: 1fr;
     }
-    .sun-filter-control {
-        align-items: stretch;
-        flex-direction: column;
-        gap: 12px;
-    }
-    .sun-filter-toggle {
-        width: 100%;
+    .light-toggles {
+        grid-template-columns: 1fr;
     }
     .window-controls.has-month {
         grid-template-columns: 1fr;

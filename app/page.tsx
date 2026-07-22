@@ -719,28 +719,6 @@ export default function Home() {
                         </button>
                     </div>
                 </fieldset>
-                <div className={`sun-filter-control ${sun30 ? "active" : ""}`}>
-                    <div>
-                        <p className="eyebrow">Solar-angle filter</p>
-                        <strong>Require the sun to be at least 30° above the horizon (drone-based imagery preference)</strong>
-                        <small>When on, only tide windows that overlap this higher-angle working light are marked usable.</small>
-                    </div>
-                    <button
-                        type="button"
-                        className="sun-filter-toggle"
-                        aria-pressed={sun30}
-                        onClick={() =>
-                            setSun30((active) => {
-                                if (!active) setIncludeNight(false);
-                                return !active;
-                            })
-                        }>
-                        <span>{sun30 ? "Filter on" : "Filter off"}</span>
-                        <b aria-hidden="true">
-                            <i />
-                        </b>
-                    </button>
-                </div>
                 <fieldset className="control threshold">
                     <legend>
                         Threshold <span>{workMode === "low" ? "maximum" : "minimum"} elevation</span>
@@ -801,13 +779,35 @@ export default function Home() {
                         ))}
                     </select>
                 </div>
-                <label className={`night ${sun30 ? "disabled" : ""}`} title={sun30 ? `Turn off the 30° sun filter to include nighttime ${workMode}s` : ""}>
-                    <input type="checkbox" checked={includeNight} disabled={sun30} onChange={(e) => setIncludeNight(e.target.checked)} />
-                    <span>
-                        <i />
-                    </span>
-                    Include nighttime {workMode}s
-                </label>
+                <div className="light-toggles">
+                    <label className="light-toggle">
+                        <input
+                            type="checkbox"
+                            checked={sun30}
+                            onChange={(e) => {
+                                if (e.target.checked) setIncludeNight(false);
+                                setSun30(e.target.checked);
+                            }}
+                        />
+                        <span className="switch" aria-hidden="true">
+                            <i />
+                        </span>
+                        <span className="toggle-text">
+                            <strong>Require sun ≥ 30° above horizon</strong>
+                            <small>Higher-angle working light (e.g. drone imagery)</small>
+                        </span>
+                    </label>
+                    <label className={`light-toggle ${sun30 ? "disabled" : ""}`} title={sun30 ? `Turn off the 30° sun filter to include nighttime ${workMode}s` : ""}>
+                        <input type="checkbox" checked={includeNight} disabled={sun30} onChange={(e) => setIncludeNight(e.target.checked)} />
+                        <span className="switch" aria-hidden="true">
+                            <i />
+                        </span>
+                        <span className="toggle-text">
+                            <strong>Include nighttime {workMode}s</strong>
+                            <small>Show windows outside daylight hours</small>
+                        </span>
+                    </label>
+                </div>
             </section>
             <section className="workspace">
                 <article className="card map-card">
