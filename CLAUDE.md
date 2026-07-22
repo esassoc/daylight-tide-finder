@@ -32,10 +32,11 @@ npm test          # build + assert the bundle is server-free and calls NOAA
 ## Architecture (small and flat — don't over-structure it)
 
 - `static/index.html` — HTML shell: `<title>`, meta description, `theme-color`
-  (`#3a524e`), favicon link, `<div id="root">`, and the module script.
+  (`#3a524e`), favicon link, the ESA font-suite `<link>` tags, `<div id="root">`,
+  and the module script.
 - `static/main.tsx` — Vite entry. Mounts `<Home/>` from `app/page.tsx` and sets
-  the `--font-geist-sans` / `--font-geist-mono` CSS vars (Inter / SF Mono
-  fallbacks). This replaces what a Next.js layout used to do.
+  the `--font-geist-sans` / `--font-geist-mono` CSS vars (DM Sans / JetBrains Mono,
+  the ESA UI + mono faces). This replaces what a Next.js layout used to do.
 - `app/page.tsx` — **the entire app**: one ~283-line client component
   (`"use client"` at the top; harmless in a pure client build). Contains all
   state, the NOAA fetch logic, the calendar/list/month views, the Leaflet map,
@@ -71,7 +72,30 @@ Current token → ESA mapping:
 | `--sand` (page background) | `#ffffff` | white |
 | `--paper` (cards/panels) | `#f3f8f7` | green-50 tint |
 
-`theme-color` in `static/index.html` and `public/favicon.svg` are also ESA-colored.
+### Fonts
+
+The ESA type suite (matching wave-runup / TalentBridge) loads from Google Fonts
+via `<link>` tags in `static/index.html`:
+
+- **DM Sans** — UI / body. Bound to `--font-geist-sans` in `main.tsx`; used for
+  `body`, controls, and the mono-labelled eyebrows fall back to it.
+- **Domine** — decorative serif headings. Exposed as `--font-serif` in the
+  `:root` of `app/globals.css`; every heading that used to say `Georgia,serif`
+  now references `var(--font-serif)`.
+- **JetBrains Mono** — mono labels / eyebrows / small caps. Bound to
+  `--font-geist-mono` in `main.tsx`.
+
+### Logo & favicon
+
+- The header brand mark is the **ESA coral-tile lockup** — a coral (`--orange`,
+  `#f48156`) rounded tile with the white ESA glyph — inlined as SVG in
+  `app/page.tsx` (class `.esa-mark`), sitting next to the DM Sans wordmark. This
+  is the same lockup ESA apps use in their app-shell topbar.
+- `public/favicon.svg` is the standalone version of that mark (coral tile +
+  white glyph, literal hex since a favicon can't resolve CSS vars).
+- `public/esa-logo.svg` is the raw ESA glyph (`fill="currentColor"`) kept as the
+  reusable brand asset.
+- `theme-color` in `static/index.html` is `#3a524e` (ESA green-800).
 
 ## Deployment
 
@@ -91,7 +115,10 @@ committed (`static-dist/` is gitignored). Just push to `main`.
   clean static Vite/React app. Damian retains the original full-stack version if
   the dynamic mode is ever needed again.
 - The app was then rebranded from its original warm "field-notebook" palette to
-  the ESA palette (full rebrand: brand hues + surfaces).
+  the ESA palette (full rebrand: brand hues + surfaces), and finally aligned with
+  the standard ESA app chrome (wave-runup / TalentBridge): the ESA type suite
+  (DM Sans / Domine / JetBrains Mono), the coral-tile ESA logo lockup, and the
+  ESA-mark favicon.
 
 ## Conventions & gotchas
 
