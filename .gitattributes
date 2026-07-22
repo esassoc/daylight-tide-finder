@@ -1,0 +1,18 @@
+# Normalize line endings: LF in the repo AND on checkout (matches Prettier's
+# endOfLine:lf), so Windows/macOS/Linux checkouts stay identical and Git stops
+# warning about CRLF conversion.
+* text=auto eol=lf
+
+# Windows-only scripts, if ever added, must stay CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary assets (never normalize)
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.webp binary
+*.woff  binary
+*.woff2 binary
