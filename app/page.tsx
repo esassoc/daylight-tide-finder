@@ -741,30 +741,6 @@ export default function Home() {
                         </b>
                     </button>
                 </div>
-                <div className="control station-control">
-                    <label htmlFor="station">
-                        Station <span>{stationStatus}</span>
-                    </label>
-                    <select
-                        id="station"
-                        value={selectedId}
-                        onChange={(e) => {
-                            const s = stations.find((x) => x.id === e.target.value);
-                            if (s) choose(s);
-                        }}>
-                        {(["CA", "OR", "WA"] as const).map((state) => (
-                            <optgroup key={state} label={STATES[state]}>
-                                {stations
-                                    .filter((s) => s.state === state)
-                                    .map((s) => (
-                                        <option key={s.id} value={s.id}>
-                                            {s.name} · {s.id}
-                                        </option>
-                                    ))}
-                            </optgroup>
-                        ))}
-                    </select>
-                </div>
                 <fieldset className="control threshold">
                     <legend>
                         Threshold <span>{workMode === "low" ? "maximum" : "minimum"} elevation</span>
@@ -825,43 +801,6 @@ export default function Home() {
                         ))}
                     </select>
                 </div>
-                <div className="control window-control">
-                    <label htmlFor="range">Date window</label>
-                    <div className={`window-controls ${rangeMode === "month" ? "has-month" : ""}`}>
-                        <select
-                            id="range"
-                            value={rangeMode}
-                            onChange={(e) => {
-                                const next = e.target.value as RangeMode;
-                                setTideStatus("Loading tide predictions…");
-                                setRangeMode(next);
-                                setSelectedDate(next === "month" ? `${monthKey}-01` : currentDate);
-                            }}>
-                            <option value="7">7 days</option>
-                            <option value="14">14 days</option>
-                            <option value="30">30 days</option>
-                            <option value="month">Full month</option>
-                        </select>
-                        {rangeMode === "month" && (
-                            <div className="month-selectors">
-                                <select aria-label="Month" value={monthKey.slice(5)} onChange={(e) => selectMonth(`${monthKey.slice(0, 4)}-${e.target.value}`)}>
-                                    {MONTHS.map((month, i) => (
-                                        <option key={month} value={String(i + 1).padStart(2, "0")}>
-                                            {month}
-                                        </option>
-                                    ))}
-                                </select>
-                                <select aria-label="Year" value={monthKey.slice(0, 4)} onChange={(e) => selectMonth(`${e.target.value}-${monthKey.slice(5)}`)}>
-                                    {yearOptions.map((year) => (
-                                        <option key={year} value={year}>
-                                            {year}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        )}
-                    </div>
-                </div>
                 <label className={`night ${sun30 ? "disabled" : ""}`} title={sun30 ? `Turn off the 30° sun filter to include nighttime ${workMode}s` : ""}>
                     <input type="checkbox" checked={includeNight} disabled={sun30} onChange={(e) => setIncludeNight(e.target.checked)} />
                     <span>
@@ -885,6 +824,30 @@ export default function Home() {
                             ))}
                         </div>
                     </header>
+                    <div className="card-control">
+                        <label htmlFor="station">
+                            Station <span>{stationStatus}</span>
+                        </label>
+                        <select
+                            id="station"
+                            value={selectedId}
+                            onChange={(e) => {
+                                const s = stations.find((x) => x.id === e.target.value);
+                                if (s) choose(s);
+                            }}>
+                            {(["CA", "OR", "WA"] as const).map((state) => (
+                                <optgroup key={state} label={STATES[state]}>
+                                    {stations
+                                        .filter((s) => s.state === state)
+                                        .map((s) => (
+                                            <option key={s.id} value={s.id}>
+                                                {s.name} · {s.id}
+                                            </option>
+                                        ))}
+                                </optgroup>
+                            ))}
+                        </select>
+                    </div>
                     <CoastMap stations={visible} selected={selected} onSelect={choose} />
                 </article>
                 <article className="card forecast">
@@ -912,6 +875,43 @@ export default function Home() {
                             </button>
                         </div>
                     </header>
+                    <div className="card-control">
+                        <label htmlFor="range">Date window</label>
+                        <div className={`window-controls ${rangeMode === "month" ? "has-month" : ""}`}>
+                            <select
+                                id="range"
+                                value={rangeMode}
+                                onChange={(e) => {
+                                    const next = e.target.value as RangeMode;
+                                    setTideStatus("Loading tide predictions…");
+                                    setRangeMode(next);
+                                    setSelectedDate(next === "month" ? `${monthKey}-01` : currentDate);
+                                }}>
+                                <option value="7">7 days</option>
+                                <option value="14">14 days</option>
+                                <option value="30">30 days</option>
+                                <option value="month">Full month</option>
+                            </select>
+                            {rangeMode === "month" && (
+                                <div className="month-selectors">
+                                    <select aria-label="Month" value={monthKey.slice(5)} onChange={(e) => selectMonth(`${monthKey.slice(0, 4)}-${e.target.value}`)}>
+                                        {MONTHS.map((month, i) => (
+                                            <option key={month} value={String(i + 1).padStart(2, "0")}>
+                                                {month}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <select aria-label="Year" value={monthKey.slice(0, 4)} onChange={(e) => selectMonth(`${e.target.value}-${monthKey.slice(5)}`)}>
+                                        {yearOptions.map((year) => (
+                                            <option key={year} value={year}>
+                                                {year}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                     {rangeMode === "month" && (
                         <div className="month-bar">
                             <button type="button" aria-label="Previous month" onClick={() => selectMonth(shiftMonthKey(monthKey, -1))}>
